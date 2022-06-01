@@ -11,12 +11,9 @@ def clean_phone_numbers(phone_num)
     "." => "",
   }
   phone_num = phone_num.gsub(/[- ().]/, to_remove)
-
+  phone_num = phone_num[1..] if phone_num[0] == "1" && phone_num.length == 10
   if phone_num.length == 10
-    phone_num.insert(3, "-")
-    phone_num.insert(7, "-")
-  elsif phone_num.length == 11 && phone_num[0] == "1"
-      phone_num = phone_num[1..]
+    phone_num.insert(3, "-").insert(7, "-")
   else
     phone_num = ""
   end
