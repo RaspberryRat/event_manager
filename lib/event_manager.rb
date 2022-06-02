@@ -103,6 +103,23 @@ def best_day_to_buy_ads(day_array)
   end
 end
 
+def clean_phone_numbers(phone_num)
+  to_remove = {
+    "-" => "",
+    " " => "",
+    "(" => "",
+    ")" => "",
+    "." => "",
+  }
+  phone_num = phone_num.gsub(/[- ().]/, to_remove)
+  phone_num = phone_num[1..] if phone_num[0] == "1" && phone_num.length == 10
+  if phone_num.length == 10
+    phone_num.insert(3, "-").insert(7, "-")
+  else
+    phone_num = ""
+  end
+end
+
 puts "Event Manager Initialized!"
 
 contents = CSV.open(
@@ -120,6 +137,7 @@ contents.each do |row|
   id = row[0]
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
+  phone_num = clean_phone_numbers(row[:homephone])
   registration_date = row[:regdate]
 
   legislators = legislators_by_zipcode(zipcode)
@@ -128,6 +146,7 @@ contents.each do |row|
   
   hours_registered.push(hour_registered(registration_date))
   days_registered.push(weekday_registered(registration_date))
+  puts "#{name}'s number is #{phone_num}"
 end
 
 time_of_day_registered(hours_registered)
